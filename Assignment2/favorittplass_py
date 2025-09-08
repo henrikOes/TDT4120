@@ -33,10 +33,42 @@ seed = 0
 
 
 def max_permutations(M):
-    # Skriv koden din her
-    pass
+    '''
+    Studenter som allerede har favorittplass
+    Ikke kan få favorittplass eller som ikke kan flytte på seg
+    '''
+    
+    return_set = set()
+    n_seats = len(M)-1
+    changable_seats = [0]*len(M)
 
-
+    
+    # M = [2, 0, 1, 1, 5, 4, 6]
+    for index, value in enumerate(M):
+        if index != value and value < n_seats: #plasser som har favorittplassen sin allerede eller har for høyt ønske
+            changable_seats[index] = 1 #sets seats that can be changed
+            
+    
+    
+    # c = [1, 1, 1, 1, 1, 1, 0]
+    # M = [2, 0, 1, 1, 5, 4, 6]
+    #remove duplex?
+    s = set(M) # {0, 1, 2, 4, 5, 6}
+    for index, value in enumerate(changable_seats):
+        if index not in s:
+            changable_seats[index] == 0
+    
+    # c = [1, 1, 1, 0, 1, 1, 0]
+    # M = [2, 0, 1, 1, 5, 4, 6]
+    
+    for index, value in enumerate(changable_seats):
+        if value == 1:
+            return_set.add(M[index])
+                
+    
+    
+        
+                
 # Hardkodete instanser pÃ¥ formatet: (M, lÃ¸sning)
 tests = [
     ([0], set()),
