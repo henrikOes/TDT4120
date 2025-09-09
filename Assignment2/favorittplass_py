@@ -31,43 +31,38 @@ n_upper = 10
 # hver gang, om verdiene over ikke endres.
 seed = 0
 
-
 def max_permutations(M):
-    '''
-    Studenter som allerede har favorittplass
-    Ikke kan få favorittplass eller som ikke kan flytte på seg
-    '''
+    n = len(M)
+    visited = [0] * n
+    result_set = set()
     
-    return_set = set()
-    n_seats = len(M)-1
-    changable_seats = [0]*len(M)
-
-    
-    # M = [2, 0, 1, 1, 5, 4, 6]
-    for index, value in enumerate(M):
-        if index != value and value < n_seats: #plasser som har favorittplassen sin allerede eller har for høyt ønske
-            changable_seats[index] = 1 #sets seats that can be changed
+    for i in range(n):
+        val = M[i]
+        #hopper over om besøkt, sitter på ønsket, eller out of range
+        if visited[i] or val == i or val >= n:
             
-    
-    
-    # c = [1, 1, 1, 1, 1, 1, 0]
-    # M = [2, 0, 1, 1, 5, 4, 6]
-    #remove duplex?
-    s = set(M) # {0, 1, 2, 4, 5, 6}
-    for index, value in enumerate(changable_seats):
-        if index not in s:
-            changable_seats[index] == 0
-    
-    # c = [1, 1, 1, 0, 1, 1, 0]
-    # M = [2, 0, 1, 1, 5, 4, 6]
-    
-    for index, value in enumerate(changable_seats):
-        if value == 1:
-            return_set.add(M[index])
-                
-    
-    
+            continue
         
+        path = []
+        current = i
+
+        while True:
+            if current >= n or visited[current] or M[current] == current:
+                break
+            path.append(current)
+            visited[current] = 1
+            current = M[current]
+        
+        # Fast cycle detection
+        if current < n:
+            try:
+                cycle_start = path.index(current)
+                result_set.update(path[cycle_start:])
+            except ValueError:
+                pass  # No cycle
+    
+    return result_set
+
                 
 # Hardkodete instanser pÃ¥ formatet: (M, lÃ¸sning)
 tests = [
