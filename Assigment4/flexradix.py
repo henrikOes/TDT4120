@@ -32,43 +32,39 @@ n_diff_chars = 5
 # hver gang, om verdiene over ikke endres.
 seed = 0
 
-def char_to_int(char):
-    return ord(char) - 97
+def msd_radix_sort(strings, pos=0):
+    if len(strings) <= 1:
+        return strings
 
-def counting_sort(A, n, k):
-    
-    #B blir karakterskalaen
-    B = [0] * n
-        
-    C = [0]*k
-    
-    #makes C[i] contain the numbers of elements equal to i
-    for j in range(n):
-        C[A[j]] += 1
+    # Lag 27 bøtter (0 = ferdige strenger, 1–26 = 'a'–'z')
+    buckets = [[] for _ in range(27)]
 
-    #C[i] inneholder nå antallet elementer som er mindre eller lik i
-    for i in range(1, k):
-        C[i] += C[i-1]
+    #Legger alle setninger i hver sin bøtte basert på første bokstav
+    for s in strings:
+        if pos < len(s):
+            idx = ord(s[pos]) - ord('a') + 1
+            buckets[idx].append(s)
+        else:
+            buckets[0].append(s)
 
-    #kopierer A til B fra slutten av A, sørger for stabil sortering
-    for j in range(n-1, -1, -1):
-        B[C[A[j]]-1] = A[j]
-        C[A[j]] -= 1
+    result = []
+    # Først alle som er ferdige på denne posisjonen
+    result.extend(buckets[0])
     
-    return B
+    # Så bokstavene i rekkefølge via rekursjon
+    for i in range(1, 27):
+        if buckets[i]:
+            result.extend(msd_radix_sort(buckets[i], pos + 1))
 
-def flexradix(A, n, d):
-    #må bruke for å gjør om enkelte bokstaver til tall
-    A_num = [""]*n
-    
-    for i in range(len(A)):
-        for j in range(len(A[i])):
-            A_num[i] += str(char_to_int(A[i][j]))
-        
-    print(A_num)
-    
-    
-        
+    return result
+
+
+def flexradix(A, n, d=None):
+    """
+    Sorterer listen A av lengde n i leksikalsk rekkefølge.
+    Kjører i lineær tid basert på total lengde av alle strengene.
+    """
+    return msd_radix_sort(A)
 
 # Hardkodete instanser pÃ¥ format: (A, d)
 tests = [
