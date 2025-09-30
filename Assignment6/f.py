@@ -1,15 +1,17 @@
+memo = {}
+
 def f(i, j):
-    total = 0 
     if i == 1 or j == 1:
-        total += 1
-    elif j == 2:
-        total += i
-    elif i == 2:
-        total += j
-    else:
-        total += f(i - 1, j)
-        total += f(i, j-1)    
-    return total
+        return 1
+    if i == 2:
+        return j
+    if j == 2:
+        return i
+    if (i, j) in memo:
+        return memo[(i, j)]
+    memo[(i, j)] = f(i - 1, j) + f(i, j - 1)
+    return memo[(i, j)]
+       
     
 # Hardkodete tester pÃ¥ format (i, j, svar)
 tests = [
