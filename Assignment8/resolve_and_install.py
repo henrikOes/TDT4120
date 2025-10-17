@@ -26,7 +26,11 @@ seed = 0
 
 
 def resolve_and_install(package):
-    
+    if package.is_installed:
+        return
+    for dependency in package.dependencies:
+        resolve_and_install(dependency)
+    install(package)
 
 
 class Package:
